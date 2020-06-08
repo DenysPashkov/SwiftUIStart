@@ -9,13 +9,36 @@
 import SwiftUI
 
 struct RoomDetail: View {
+    
+    let room : Room
+    
+    @State private var zoomed = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack(alignment: .topLeading){
+            
+            Image(room.imageName)
+                .resizable()
+                .border(Color.black, width: 10)
+                .aspectRatio(contentMode: zoomed ? .fill : .fit)
+                .navigationBarTitle(Text(room.name),displayMode: .inline)
+                .onTapGesture { withAnimation(.linear(duration: 1)) { self.zoomed.toggle() } }
+                .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+            
+            if room.hasVideo && !zoomed {
+                Image(systemName: "video.fill")
+                    .font(.title)
+                    .padding(.all).transition(.move(edge: .leading))
+            }
+        }
     }
 }
 
 struct RoomDetail_Previews: PreviewProvider {
     static var previews: some View {
-        RoomDetail()
+        Group {
+            NavigationView{ RoomDetail(room: testData[0]) }
+            NavigationView{ RoomDetail(room: testData[1]) }
+        }
     }
 }

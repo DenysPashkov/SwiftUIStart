@@ -7,15 +7,23 @@
 //
 
 import SwiftUI
+import Combine
 
-struct RoomStore: View {
-    var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+class RoomStore : ObservableObject {
+    var rooms : [Room] {
+        
+        willSet{
+            
+            objectWillChange.send()
+            
+        }
+        
     }
-}
-
-struct RoomStore_Previews: PreviewProvider {
-    static var previews: some View {
-        RoomStore()
+    
+    init(rooms : [Room] = []) {
+        self.rooms = rooms
     }
+    
+    var didChange = PassthroughSubject<Void, Never>()
+    
 }
